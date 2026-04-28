@@ -1,4 +1,4 @@
-FROM node:19.6 bullseye-slim AS base
+FROM node:20 bullseye-slim AS base
 
 WORKDIR /usr/src/app
 
@@ -6,26 +6,24 @@ COPY package*.json ./
 
 FROM base AS dev 
 
-RUN --mount=type=cache,target=/usr/src/app/ .npm \
-  npm set cache /usr/src/app/.npm && \
-  npm install
+RUN npm install
 
-COPY . . 
+COPY . .
 
-CMD ["node", "/src/server.js"]
+CMD ["node", "src/server.js"]
 
 FROM base AS production
 
 ENV NODE_ENV production
 
-RUN --mount=type=cache,target=/usr/src/app/ .npm \
-  npm set cache /usr/src/app/.npm && \
-  npm ci --only=production
+RUN npm ci --only=production
 
 USER node 
 
 COPY --chown=node:node ./src/ .
 
 EXPOSE 3000
+
+CMD ["node", "src/server.js"]
 
 CMD ["node", "/src/server.js"]
