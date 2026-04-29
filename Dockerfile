@@ -10,7 +10,7 @@ RUN npm install
 
 COPY . .
 
-CMD ["node", "src/server.js"]
+CMD ["node", "server.js"]
 
 FROM base AS production
 
@@ -24,6 +24,4 @@ COPY --chown=node:node ./src/ .
 
 EXPOSE 3000
 
-CMD ["node", "src/server.js"]
-
-CMD ["node", "/src/server.js"]
+CMD ["node", "server.js"]
